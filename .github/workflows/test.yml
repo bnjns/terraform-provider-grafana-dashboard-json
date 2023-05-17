@@ -1,0 +1,67 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'readme.md'
+      - 'CHANGELOG.md'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'readme.md'
+      - 'CHANGELOG.md'
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - run: go mod download
+      - shell: bash
+        run: |
+          go test ./... \
+            -coverprofile=tests/coverage-unit.out -json | tee tests/report-unit.json
+
+  acceptance:
+    name: Acceptance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        terraform:
+          - '1.0'
+          - '1.1'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ matrix.terraform }}.*
+          terraform_wrapper: false
+      - run: go mod download
+      - shell: bash
+        env:
+          TF_ACC: "1"
+        run: |
+          go test -v ./... -run "^TestAcc" \
+            -coverprofile=tests/coverage-acc.out -json | tee tests/report-acc.json
+        timeout-minutes: 10

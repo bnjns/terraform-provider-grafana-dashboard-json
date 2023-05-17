@@ -1,0 +1,40 @@
+### Vim ###
+*.swp
+*.swo
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+
+### IntelliJ ###
+.idea
+*.ipr
+*.iml
+*.iws
+
+### NetBeans ###
+nb-configuration.xml
+
+### macOS ###
+.DS_Store
+
+### Tests ###
+!command/test-fixtures/**/*.tfstate
+!command/test-fixtures/**/.terraform/
+
+### Build files ###
+*.exe
+dist/
+
+### Terraform ###
+*.tfstate*
+*.lock.hcl
+.terraform/
+*.tf
+!/examples/**/*.tf
+
+### Misc ###
+vendor/
+/terraform-provider-*
+/tests/*

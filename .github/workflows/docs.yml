@@ -1,0 +1,30 @@
+name: Docs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'readme.md'
+      - 'CHANGELOG.md'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - run: go generate ./...
+      - shell: bash
+        name: git diff
+        run: |
+          git add .
+          git diff --compact-summary --exit-code --quiet HEAD || \
+            (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)

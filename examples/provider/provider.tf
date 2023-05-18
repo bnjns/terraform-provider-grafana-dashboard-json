@@ -1,3 +1,1 @@
-provider "scaffolding" {
-  # example configuration here
-}
+provider "grafana-dashboard-json" {}

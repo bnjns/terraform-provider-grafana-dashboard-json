@@ -6,7 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"terraform-provider-grafana-dashboard-json/internal/dashboard"
+	"terraform-provider-grafana-dashboard-json/internal/provider/dashboard"
+	"terraform-provider-grafana-dashboard-json/internal/provider/row"
 )
 
 // Ensure GrafanaDashboardJsonProvider satisfies various provider interfaces.
@@ -16,9 +17,6 @@ var _ provider.Provider = &GrafanaDashboardJsonProvider{}
 type GrafanaDashboardJsonProvider struct {
 	version string
 }
-
-// ScaffoldingProviderModel describes the provider data model.
-type ScaffoldingProviderModel struct{}
 
 func (p *GrafanaDashboardJsonProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "grafana-dashboard-json"
@@ -40,6 +38,7 @@ func (p *GrafanaDashboardJsonProvider) Resources(ctx context.Context) []func() r
 func (p *GrafanaDashboardJsonProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		dashboard.NewDashboardDataSource,
+		row.NewRowDataSource,
 	}
 }
 

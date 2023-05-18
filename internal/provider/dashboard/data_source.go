@@ -51,6 +51,15 @@ func (d dataSource) Schema(ctx context.Context, request datasource.SchemaRequest
 				MarkdownDescription: "Whether to continuously re-draw panels where the time range references 'now'",
 				Optional:            true,
 			},
+			"panels": schema.ListAttribute{
+				ElementType:         types.StringType,
+				MarkdownDescription: "",
+				Optional:            true,
+			},
+			"panel_json": schema.StringAttribute{
+				MarkdownDescription: "",
+				Optional:            true,
+			},
 			"refresh": schema.StringAttribute{
 				MarkdownDescription: "",
 				Optional:            true,
@@ -160,6 +169,6 @@ func (d dataSource) Read(ctx context.Context, request datasource.ReadRequest, re
 
 	// Set the state
 	data.RenderedJson = types.StringValue(renderedJson)
-	response.State.Set(ctx, data)
+	diags = response.State.Set(ctx, data)
 	response.Diagnostics.Append(diags...)
 }

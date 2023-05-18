@@ -19,6 +19,9 @@ type model struct {
 	Timezone     types.String `tfsdk:"timezone"`
 	Title        types.String `tfsdk:"title"`
 	WeekStart    types.String `tfsdk:"week_start"`
+
+	Panels    types.List   `tfsdk:"panels"`
+	PanelJson types.String `tfsdk:"panel_json"`
 }
 
 type timeRange struct {

@@ -3,7 +3,9 @@ package dashboard
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"terraform-provider-grafana-dashboard-json/internal/transforms"
 )
 
@@ -17,6 +19,8 @@ const (
 )
 
 func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
+	tflog.Debug(ctx, "Rendering dashboard as JSON")
+
 	var diags diag.Diagnostics
 
 	editable := defaultEditable
@@ -29,6 +33,9 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 		graphTooltip = data.GraphTooltip.ValueInt64()
 	}
 
+	panels, panelDiags := renderPanels(ctx, data)
+	diags.Append(panelDiags...)
+
 	liveNow := defaultLiveNow
 	if !data.LiveNow.IsNull() {
 		liveNow = data.LiveNow.ValueBool()
@@ -37,7 +44,6 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 	style := defaultStyle
 	if !data.Style.IsNull() {
 		style = data.Style.ValueString()
-
 	}
 
 	var tags []string
@@ -56,7 +62,7 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 		Editable:      editable,
 		GraphTooltip:  graphTooltip,
 		LiveNow:       liveNow,
-		Panels:        []interface{}{},
+		Panels:        panels,
 		Refresh:       transforms.FromTerraformString(data.Refresh),
 		SchemaVersion: schemaVersion,
 		Style:         style,
@@ -71,6 +77,7 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 		WeekStart:  data.WeekStart.ValueString(),
 	}
 
+	tflog.Debug(ctx, "Writing the dashboard to JSON")
 	dashboardJson, err := json.Marshal(dashboard)
 	if err != nil {
 		diags.AddError(
@@ -103,4 +110,47 @@ func renderTimepicker(ctx context.Context, timepicker []timepicker) *jsonTimepic
 		TimeOptions:      timeOptions,
 		RefreshIntervals: refreshIntervals,
 	}
+}
+
+func renderPanels(ctx context.Context, data model) ([]map[string]interface{}, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	panels := make([]map[string]interface{}, 0)
+
+	if !data.PanelJson.IsNull() {
+		tflog.Debug(ctx, "Adding panels from `panel_json`")
+		err := json.Unmarshal([]byte(data.PanelJson.ValueString()), &panels)
+		if err != nil {
+			diags.AddError(
+				"Failed to deserialise panel_json",
+				err.Error(),
+			)
+		}
+	}
+
+	if !data.Panels.IsNull() {
+		tflog.Debug(ctx, "Adding panels from `panel`")
+		var panelsList []string
+		diags.Append(data.Panels.ElementsAs(ctx, &panelsList, true)...)
+
+		for i, panelStr := range panelsList {
+			var panel map[string]interface{}
+			err := json.Unmarshal([]byte(panelStr), &panel)
+			if err != nil {
+				diags.AddError(
+					"Failed to deserialise panel",
+					fmt.Sprintf("Failed to deserialise panel in `panels` at index %d: %e", i, err),
+				)
+			}
+
+			panels = append(panels, panel)
+		}
+	}
+
+	for i, _ := range panels {
+		tflog.Debug(ctx, fmt.Sprintf("Setting the ID of panel %d to %d", i, i+1))
+		panels[i]["id"] = i + 1
+	}
+
+	return panels, diags
 }

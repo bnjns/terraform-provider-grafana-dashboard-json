@@ -1,7 +1,7 @@
 package dashboard
 
 import (
-	"terraform-provider-grafana-dashboard-json/internal/datasource"
+	"terraform-provider-grafana-dashboard-json/internal/provider/datasource"
 )
 
 type jsonModel struct {
@@ -10,7 +10,6 @@ type jsonModel struct {
 	Editable      bool             `json:"editable"`
 	GraphTooltip  int64            `json:"graphTooltip"`
 	LiveNow       bool             `json:"liveNow"`
-	Panels        []interface{}    `json:"panels"`
 	Refresh       *string          `json:"refresh,omitempty"`
 	SchemaVersion int64            `json:"schemaVersion"`
 	Style         string           `json:"style"`
@@ -20,6 +19,8 @@ type jsonModel struct {
 	Timezone      string           `json:"timezone"`
 	Title         string           `json:"title"`
 	WeekStart     string           `json:"weekStart,omitempty"`
+
+	Panels []map[string]interface{} `json:"panels"`
 
 	// TODO: links
 	// TODO: templating

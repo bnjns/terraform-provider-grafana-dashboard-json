@@ -11,11 +11,11 @@
 A Terraform provider that lets you manage your Metabase instance, because why not Terraform the world?
 </div>
 
-## About
+## 🧐 About
 
 <!-- TODO -->
 
-## Getting Started
+## 🏁 Getting Started
 
 ### Prerequisites
 
@@ -36,7 +36,7 @@ Install the Go dependencies:
 $ go mod download
 ```
 
-## Usage
+## 🎈 Usage
 
 ### Building the provider
 
@@ -85,12 +85,12 @@ To run the provider acceptance tests:
 $ TF_ACC=1 go test -v ./... -run "^TestAcc"
 ```
 
-## Releasing
+## 🚀 Releasing
 
 Releasing is handled automatically by [GitHub Actions](.github/workflows/release.yml) and
 Hashicorp's `terraform-provider-release` action. An admin will simply tag the latest release to trigger the pipeline.
 
-## Built Using
+## ⛏️ Built Using
 
 - [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework)
 

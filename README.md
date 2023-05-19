@@ -8,12 +8,25 @@
 
 ---
 
-A Terraform provider that lets you manage your Metabase instance, because why not Terraform the world?
+A Terraform provider for generating the JSON for Grafana dashboards.
 </div>
 
 ## 🧐 About
 
-<!-- TODO -->
+Managing dashboards with the [Grafana Terraform provider][grafana-provider] requires writing the JSON manually; this
+makes the dashboard configuration verbose and difficult to maintain. There is an [open request][provider-issue] to
+extend the provider to use more "native" Terraform functionality (such as blocks/arguments) to make this easier for
+practitioners, but it is unknown whether this will be adopted.
+
+This provider exists primarily as a proof-of-concept for this feature request; while every effort will be made to
+support the full dashboard schema, this provider may lag.
+
+Currently supported:
+
+- `grafana-dashboard-json_dashboard`: Use to generate the final dashboard JSON
+- `grafana-dashboard-json_row`: Used to generate the JSON for rows
+
+<!-- See the Terraform registry documentation for full usage details. -->
 
 ## 🏁 Getting Started
 
@@ -97,3 +110,6 @@ Hashicorp's `terraform-provider-release` action. An admin will simply tag the la
 ## ✍️ Authors
 
 - [@bnjns](https://github.com/bnjns)
+
+[grafana-provider]: https://registry.terraform.io/providers/grafana/grafana
+[provider-issue]: https://github.com/grafana/terraform-provider-grafana/issues/299

@@ -17,7 +17,7 @@ func DurationStringValidator() validator.String {
 }
 
 func (v durationStringValidator) Description(ctx context.Context) string {
-	return ""
+	return "string must be a valid duration"
 }
 
 func (v durationStringValidator) MarkdownDescription(ctx context.Context) string {

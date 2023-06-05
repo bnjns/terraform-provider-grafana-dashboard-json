@@ -25,6 +25,7 @@ Currently supported:
 
 - `grafana-dashboard-json_dashboard`: Use to generate the final dashboard JSON
 - `grafana-dashboard-json_row`: Used to generate the JSON for rows
+- `grafana-dashboard-json_panel`: Used to generate the JSON for panels
 
 <!-- See the Terraform registry documentation for full usage details. -->
 

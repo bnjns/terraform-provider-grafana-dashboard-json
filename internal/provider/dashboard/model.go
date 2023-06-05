@@ -20,8 +20,8 @@ type model struct {
 	Title        types.String `tfsdk:"title"`
 	WeekStart    types.String `tfsdk:"week_start"`
 
-	Panels    types.List   `tfsdk:"panels"`
-	PanelJson types.String `tfsdk:"panel_json"`
+	Panels         types.List   `tfsdk:"panels"`
+	ExtraPanelJson types.String `tfsdk:"extra_panel_json"`
 }
 
 type timeRange struct {

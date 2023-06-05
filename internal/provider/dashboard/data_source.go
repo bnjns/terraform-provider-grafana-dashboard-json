@@ -54,9 +54,9 @@ func (d dataSource) Schema(ctx context.Context, request datasource.SchemaRequest
 			"panels": schema.ListAttribute{
 				ElementType:         types.StringType,
 				MarkdownDescription: "",
-				Optional:            true,
+				Required:            true,
 			},
-			"panel_json": schema.StringAttribute{
+			"extra_panel_json": schema.StringAttribute{
 				MarkdownDescription: "",
 				Optional:            true,
 			},

@@ -117,33 +117,37 @@ func renderPanels(ctx context.Context, data model) ([]map[string]interface{}, di
 
 	panels := make([]map[string]interface{}, 0)
 
-	if !data.PanelJson.IsNull() {
-		tflog.Debug(ctx, "Adding panels from `panel_json`")
-		err := json.Unmarshal([]byte(data.PanelJson.ValueString()), &panels)
+	tflog.Debug(ctx, "Adding panels from `panel`")
+	var panelsList []string
+	diags.Append(data.Panels.ElementsAs(ctx, &panelsList, true)...)
+
+	for i, panelStr := range panelsList {
+		var panel map[string]interface{}
+		err := json.Unmarshal([]byte(panelStr), &panel)
 		if err != nil {
 			diags.AddError(
-				"Failed to deserialise panel_json",
-				err.Error(),
+				"Failed to deserialise panel",
+				fmt.Sprintf("Failed to deserialise panel in `panels` at index %d: %e", i, err),
 			)
 		}
+
+		panels = append(panels, panel)
 	}
 
-	if !data.Panels.IsNull() {
-		tflog.Debug(ctx, "Adding panels from `panel`")
-		var panelsList []string
-		diags.Append(data.Panels.ElementsAs(ctx, &panelsList, true)...)
+	if !data.ExtraPanelJson.IsNull() {
+		tflog.Debug(ctx, "Adding panels from `extra_panel_json`")
+		var extraPanelJson []map[string]interface{}
 
-		for i, panelStr := range panelsList {
-			var panel map[string]interface{}
-			err := json.Unmarshal([]byte(panelStr), &panel)
-			if err != nil {
-				diags.AddError(
-					"Failed to deserialise panel",
-					fmt.Sprintf("Failed to deserialise panel in `panels` at index %d: %e", i, err),
-				)
+		err := json.Unmarshal([]byte(data.ExtraPanelJson.ValueString()), &extraPanelJson)
+		if err != nil {
+			diags.AddError(
+				"Failed to deserialise `extra_panel_json`",
+				err.Error(),
+			)
+		} else {
+			for _, panel := range extraPanelJson {
+				panels = append(panels, panel)
 			}
-
-			panels = append(panels, panel)
 		}
 	}
 

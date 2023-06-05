@@ -18,6 +18,12 @@ const (
 	defaultStyle        string = "auto"
 )
 
+var (
+	validWeekdays  = []string{"saturday", "sunday", "monday"}
+	validTimezones = []string{"browser", "utc"}
+	validStyles    = []string{"light", "dark", "auto"}
+)
+
 func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 	tflog.Debug(ctx, "Rendering dashboard as JSON")
 
@@ -67,14 +73,11 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 		SchemaVersion: schemaVersion,
 		Style:         style,
 		Tags:          tags,
-		Time: &jsonTimeRange{
-			From: data.Time.From.ValueString(),
-			To:   data.Time.To.ValueString(),
-		},
-		Timepicker: renderTimepicker(ctx, data.Timepicker),
-		Timezone:   timezone,
-		Title:      data.Title.ValueString(),
-		WeekStart:  data.WeekStart.ValueString(),
+		Time:          renderTimeRange(data.Time),
+		Timepicker:    renderTimepicker(ctx, data.Timepicker),
+		Timezone:      timezone,
+		Title:         data.Title.ValueString(),
+		WeekStart:     data.WeekStart.ValueString(),
 	}
 
 	tflog.Debug(ctx, "Writing the dashboard to JSON")
@@ -87,6 +90,17 @@ func RenderJson(ctx context.Context, data model) (string, diag.Diagnostics) {
 	}
 
 	return string(dashboardJson), diags
+}
+
+func renderTimeRange(timeRange []timeRange) *jsonTimeRange {
+	if len(timeRange) == 0 {
+		return nil
+	}
+
+	return &jsonTimeRange{
+		From: timeRange[0].From.ValueString(),
+		To:   timeRange[0].To.ValueString(),
+	}
 }
 
 func renderTimepicker(ctx context.Context, timepicker []timepicker) *jsonTimepicker {

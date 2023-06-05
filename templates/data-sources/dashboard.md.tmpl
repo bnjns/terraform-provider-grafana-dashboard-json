@@ -1,0 +1,42 @@
+---
+page_title: "{{ .Type }}: {{ .Name }}"
+description: |-
+    {{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{ .Type }}: {{ .Name }}
+
+This data source allows you to generate the JSON to be used to configure Grafana dashboards. This data source is
+designed to be used directly with
+the [`grafana_dashboard` resource](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/dashboard).
+
+~> The following dashboard properties are not yet supported: `annotations`, `templating`, `links`.
+
+## Example Usage
+
+{{ tffile "examples/data-sources/dashboard/default.tf" }}
+
+### Configuring panels and rows
+
+It is recommended that you configure panels and rows using the `grafana-dashboard-json_panel`
+and `grafana-dashboard-json_row` data sources, and configuring the `panels` attribute with their rendered JSON. This
+allows you to use the native Terraform syntax to configure the panels.
+
+All rows and panels will be automatically provided an auto-incrementing ID in the order they're provided.
+
+{{ tffile "examples/data-sources/dashboard/panels_datasource.tf" }}
+
+### Manually configuring panels and rows
+
+You can alternatively provide the panels and/or rows as a raw JSON-encoded string, which is useful for panels which are
+not supported by the provided data sources.
+
+If provided, these panels will be _appended_ to any panels/rows provided in the `panels` attribute, so you will need to
+ensure they are positioned correctly (using `gridPos`).
+
+Each panel/row provided will also be automatically given an auto-incrementing ID in the order they're provided, which
+will begin after any panels/rows provided in the `panels` attribute.
+
+{{ tffile "examples/data-sources/dashboard/panels_manual.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}

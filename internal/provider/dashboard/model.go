@@ -14,7 +14,7 @@ type model struct {
 	Refresh      types.String `tfsdk:"refresh"`
 	Style        types.String `tfsdk:"style"`
 	Tags         types.List   `tfsdk:"tags"`
-	Time         timeRange    `tfsdk:"time"`
+	Time         []timeRange  `tfsdk:"time"`
 	Timepicker   []timepicker `tfsdk:"timepicker"`
 	Timezone     types.String `tfsdk:"timezone"`
 	Title        types.String `tfsdk:"title"`

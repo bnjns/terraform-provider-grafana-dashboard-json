@@ -85,6 +85,8 @@ The documentation can be auto-generated using `tfplugindocs`:
 go generate
 ```
 
+You can preview the generated documentation [in the Terraform Registry][preview-docs].
+
 ### Running the tests
 
 To run the unit tests:
@@ -114,3 +116,4 @@ Hashicorp's `terraform-provider-release` action. An admin will simply tag the la
 
 [grafana-provider]: https://registry.terraform.io/providers/grafana/grafana
 [provider-issue]: https://github.com/grafana/terraform-provider-grafana/issues/299
+[preview-docs]: https://registry.terraform.io/tools/doc-preview

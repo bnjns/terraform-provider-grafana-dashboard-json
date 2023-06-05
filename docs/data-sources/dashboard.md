@@ -16,16 +16,16 @@ description: |-
 
 ### Required
 
+- `panels` (List of String)
 - `title` (String)
 
 ### Optional
 
 - `description` (String)
 - `editable` (Boolean)
+- `extra_panel_json` (String)
 - `graph_tooltip` (Number)
 - `live_now` (Boolean) Whether to continuously re-draw panels where the time range references 'now'
-- `panel_json` (String)
-- `panels` (List of String)
 - `refresh` (String)
 - `style` (String)
 - `tags` (List of String)

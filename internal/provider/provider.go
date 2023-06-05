@@ -25,11 +25,13 @@ func (p *GrafanaDashboardJsonProvider) Metadata(ctx context.Context, req provide
 }
 
 func (p *GrafanaDashboardJsonProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
-	resp.Schema = schema.Schema{}
+	resp.Schema = schema.Schema{
+		Description: "This provider allows practitioners to programmatically generate the JSON for your Grafana dashboards, using native Terraform functionality.",
+	}
 }
 
 func (p *GrafanaDashboardJsonProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-
+	// No configuration is necessary
 }
 
 func (p *GrafanaDashboardJsonProvider) Resources(ctx context.Context) []func() resource.Resource {

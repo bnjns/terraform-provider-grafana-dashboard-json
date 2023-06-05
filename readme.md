@@ -29,7 +29,7 @@ Currently supported:
 
 ## :checkered_flag: Getting Started
 
-Configuring your Terraform to install the provider:
+Configure your Terraform to install the provider:
 
 ```hcl
 terraform {

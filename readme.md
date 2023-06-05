@@ -27,9 +27,26 @@ Currently supported:
 - `grafana-dashboard-json_row`: Used to generate the JSON for rows
 - `grafana-dashboard-json_panel`: Used to generate the JSON for panels
 
-<!-- See the Terraform registry documentation for full usage details. -->
+## :checkered_flag: Getting Started
 
-## 🏁 Getting Started
+Configuring your Terraform to install the provider:
+
+```hcl
+terraform {
+  required_providers {
+    grafana-dashboard-json = {
+      source  = "bnjns/grafana-dashboard-json"
+      version = "~> 0.0"
+    }
+  }
+}
+
+provider "grafana-dashboard-json" {}
+```
+
+See the [Terraform registry documentation](#) for full usage details.
+
+## :wrench: Developing
 
 ### Prerequisites
 
@@ -49,8 +66,6 @@ Install the Go dependencies:
 ```sh
 $ go mod download
 ```
-
-## 🎈 Usage
 
 ### Building the provider
 
@@ -101,16 +116,16 @@ To run the provider acceptance tests:
 $ TF_ACC=1 go test -v ./... -run "^TestAcc"
 ```
 
-## 🚀 Releasing
+## :rocket: Releasing
 
 Releasing is handled automatically by [GitHub Actions](.github/workflows/release.yml) and
 Hashicorp's `terraform-provider-release` action. An admin will simply tag the latest release to trigger the pipeline.
 
-## ⛏️ Built Using
+## :pick: Built Using
 
 - [terraform-provider-scaffolding-framework](https://github.com/hashicorp/terraform-provider-scaffolding-framework)
 
-## ✍️ Authors
+## :writing_hand: Authors
 
 - [@bnjns](https://github.com/bnjns)
 

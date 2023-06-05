@@ -1,7 +1,7 @@
 package dashboard
 
 import (
-	"terraform-provider-grafana-dashboard-json/internal/provider/datasource"
+	"terraform-provider-grafana-dashboard-json/internal/provider/utils"
 )
 
 type jsonModel struct {
@@ -38,7 +38,7 @@ type jsonAnnotation struct {
 	Name      string `json:"name"`
 	Type      string `json:"type"`
 
-	Datasource datasource.JsonModel `json:"datasource"`
+	Datasource utils.DatasourceJson `json:"datasource"`
 }
 
 type jsonTimeRange struct {

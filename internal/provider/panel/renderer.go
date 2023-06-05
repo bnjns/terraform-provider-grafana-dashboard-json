@@ -5,43 +5,45 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"terraform-provider-grafana-dashboard-json/internal/provider/utils"
 )
 
 func (m model) renderJson(ctx context.Context) utils.RenderedPanel {
 	var diags diag.Diagnostics
 
-	datasource := map[string]interface{}{
-		"type": m.Datasource.Type.ValueString(),
-		"uid":  m.Datasource.Uid.ValueString(),
+	datasourceJson := utils.DatasourceJson{
+		Type: m.Datasource.Type.ValueString(),
+		Uid:  m.Datasource.Uid.ValueString(),
 	}
 	gridPosition := utils.MakeGridPosition(m.Size, m.Position)
-	targets, targetDiags := renderTargets(m.Targets, datasource)
+	targets, targetDiags := renderTargets(m.Targets, datasourceJson)
 	diags.Append(targetDiags...)
 
+	// Create the initial panel object from the preset properties
 	panel := map[string]interface{}{
-		"datasource": datasource,
+		"datasource": datasourceJson,
 		"gridPos":    gridPosition.ToJson(),
 		"targets":    targets,
 		"title":      m.Title.ValueString(),
 		"type":       m.Type.ValueString(),
 	}
 
+	// Parse the extra panel JSON, and add it to the panel object
 	if !m.ExtraJson.IsNull() {
+		tflog.Debug(ctx, "Parsing extra_json and adding to panel")
 		var extraPanelJson map[string]interface{}
 		err := json.Unmarshal([]byte(m.ExtraJson.ValueString()), &extraPanelJson)
 		if err != nil {
 			diags.AddError("Failed to parse extra panel JSON", err.Error())
-			return utils.RenderedPanel{
-				Diagnostics: diags,
+		} else {
+			for k, v := range extraPanelJson {
+				panel[k] = v
 			}
-		}
-
-		for k, v := range extraPanelJson {
-			panel[k] = v
 		}
 	}
 
+	// Render the full panel to a JSON string
 	panelJson, err := json.Marshal(panel)
 	if err != nil {
 		diags.AddError("Failed to serialise panel as JSON", err.Error())
@@ -57,7 +59,7 @@ func (m model) renderJson(ctx context.Context) utils.RenderedPanel {
 	}
 }
 
-func renderTargets(targets []modelTarget, datasource map[string]interface{}) ([]map[string]interface{}, diag.Diagnostics) {
+func renderTargets(targets []modelTarget, datasource utils.DatasourceJson) ([]map[string]interface{}, diag.Diagnostics) {
 	var diags diag.Diagnostics
 	renderedTargets := make([]map[string]interface{}, len(targets))
 

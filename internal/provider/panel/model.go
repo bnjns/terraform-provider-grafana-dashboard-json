@@ -9,9 +9,9 @@ type model struct {
 	RenderedJson types.String             `tfsdk:"rendered_json"`
 	NextPosition *utils.PanelNextPosition `tfsdk:"next_position"`
 
-	Title      types.String    `tfsdk:"title"`
-	Type       types.String    `tfsdk:"type"`
-	Datasource modelDataSource `tfsdk:"datasource"`
+	Title      types.String          `tfsdk:"title"`
+	Type       types.String          `tfsdk:"type"`
+	Datasource utils.DatasourceModel `tfsdk:"datasource"`
 
 	Targets []modelTarget `tfsdk:"targets"`
 
@@ -19,11 +19,6 @@ type model struct {
 	Size     utils.PanelSize      `tfsdk:"size"`
 
 	ExtraJson types.String `tfsdk:"extra_json"`
-}
-
-type modelDataSource struct {
-	Type types.String `tfsdk:"type"`
-	Uid  types.String `tfsdk:"uid"`
 }
 
 type modelTarget struct {

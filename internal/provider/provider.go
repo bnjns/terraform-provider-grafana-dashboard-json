@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"terraform-provider-grafana-dashboard-json/internal/provider/dashboard"
+	"terraform-provider-grafana-dashboard-json/internal/provider/panel"
 	"terraform-provider-grafana-dashboard-json/internal/provider/row"
 )
 
@@ -38,6 +39,7 @@ func (p *GrafanaDashboardJsonProvider) Resources(ctx context.Context) []func() r
 func (p *GrafanaDashboardJsonProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		dashboard.NewDashboardDataSource,
+		panel.NewPanelDataSource,
 		row.NewRowDataSource,
 	}
 }

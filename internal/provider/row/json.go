@@ -1,12 +1,12 @@
 package row
 
 import (
-	"terraform-provider-grafana-dashboard-json/internal/provider/panels"
+	"terraform-provider-grafana-dashboard-json/internal/provider/utils"
 )
 
 type jsonModel struct {
-	GridPos   panels.GridPositionJson `json:"gridPos"`
-	Title     string                  `json:"title"`
-	TitleSize string                  `json:"titleSize,omitempty"`
-	Type      string                  `json:"type"`
+	GridPos   utils.GridPositionJson `json:"gridPos"`
+	Title     string                 `json:"title"`
+	TitleSize string                 `json:"titleSize,omitempty"`
+	Type      string                 `json:"type"`
 }

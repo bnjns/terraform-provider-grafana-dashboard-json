@@ -1,4 +1,4 @@
-package panels
+package utils
 
 import "github.com/hashicorp/terraform-plugin-framework/diag"
 

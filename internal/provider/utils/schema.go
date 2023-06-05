@@ -1,4 +1,4 @@
-package panels
+package utils
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -12,6 +12,7 @@ const (
 	positionKey     string = "position"
 	nextPositionKey string = "next_position"
 	sizeKey         string = "size"
+	renderedJsonKey string = "rendered_json"
 
 	positionAttrTypeInput positionAttrType = iota
 	positionAttrTypeOutput
@@ -45,7 +46,7 @@ func positionAttr(t positionAttrType) schema.Attribute {
 
 var sizeAttr = schema.SingleNestedAttribute{
 	MarkdownDescription: "",
-	Optional:            true,
+	Required:            true,
 	Attributes: map[string]schema.Attribute{
 		"height": schema.Int64Attribute{
 			MarkdownDescription: "",
@@ -72,6 +73,13 @@ var nextPositionAttr = schema.SingleNestedAttribute{
 		"below":    positionAttr(positionAttrTypeOutput),
 		"next_row": positionAttr(positionAttrTypeOutput),
 	},
+}
+
+func AddRenderedJsonSchema(attrs map[string]schema.Attribute) {
+	attrs[renderedJsonKey] = schema.StringAttribute{
+		MarkdownDescription: "",
+		Computed:            true,
+	}
 }
 
 func AddSizeAndPositionSchema(attrs map[string]schema.Attribute) {

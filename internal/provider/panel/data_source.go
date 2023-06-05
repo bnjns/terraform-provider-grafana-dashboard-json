@@ -1,4 +1,4 @@
-package row
+package panel
 
 import (
 	"context"
@@ -10,28 +10,63 @@ import (
 
 var _ datasource.DataSource = &dataSource{}
 
-func NewRowDataSource() datasource.DataSource {
+func NewPanelDataSource() datasource.DataSource {
 	return &dataSource{}
 }
 
 type dataSource struct{}
 
 func (d dataSource) Metadata(ctx context.Context, request datasource.MetadataRequest, response *datasource.MetadataResponse) {
-	response.TypeName = request.ProviderTypeName + "_row"
+	response.TypeName = request.ProviderTypeName + "_panel"
 }
 
 func (d dataSource) Schema(ctx context.Context, request datasource.SchemaRequest, response *datasource.SchemaResponse) {
 	attrs := map[string]schema.Attribute{
-		"rendered_json": schema.StringAttribute{
+		"datasource": schema.SingleNestedAttribute{
 			MarkdownDescription: "",
-			Computed:            true,
+			Required:            true,
+			Attributes: map[string]schema.Attribute{
+				"type": schema.StringAttribute{
+					MarkdownDescription: "",
+					Required:            true,
+				},
+				"uid": schema.StringAttribute{
+					MarkdownDescription: "",
+					Required:            true,
+				},
+			},
+		},
+		"extra_json": schema.StringAttribute{
+			MarkdownDescription: "",
+			Optional:            true,
+		},
+		"targets": schema.ListNestedAttribute{
+			MarkdownDescription: "",
+			Required:            true,
+			NestedObject: schema.NestedAttributeObject{
+				Attributes: map[string]schema.Attribute{
+					"ref_id": schema.StringAttribute{
+						MarkdownDescription: "",
+						Required:            true,
+					},
+					"extra_json": schema.StringAttribute{
+						MarkdownDescription: "",
+						Optional:            true,
+					},
+				},
+			},
 		},
 		"title": schema.StringAttribute{
 			MarkdownDescription: "",
 			Required:            true,
 		},
+		"type": schema.StringAttribute{
+			MarkdownDescription: "",
+			Required:            true,
+		},
 	}
-	utils.AddPositionSchema(attrs)
+	utils.AddRenderedJsonSchema(attrs)
+	utils.AddSizeAndPositionSchema(attrs)
 	utils.AddNextPositionSchema(attrs)
 
 	response.Schema = schema.Schema{
@@ -56,6 +91,5 @@ func (d dataSource) Read(ctx context.Context, request datasource.ReadRequest, re
 
 	data.RenderedJson = types.StringValue(rendered.Json)
 	data.NextPosition = &rendered.NextPosition
-	diags = response.State.Set(ctx, data)
-	response.Diagnostics.Append(diags...)
+	response.Diagnostics.Append(response.State.Set(ctx, data)...)
 }

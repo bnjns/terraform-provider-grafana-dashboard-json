@@ -18,14 +18,14 @@ const (
 	positionAttrTypeOutput
 )
 
-func positionAttr(t positionAttrType) schema.Attribute {
+func positionAttr(t positionAttrType, desc string) schema.Attribute {
 	return schema.SingleNestedAttribute{
-		MarkdownDescription: "",
+		MarkdownDescription: desc,
 		Optional:            t == positionAttrTypeInput,
 		Computed:            t == positionAttrTypeOutput,
 		Attributes: map[string]schema.Attribute{
 			"left": schema.Int64Attribute{
-				MarkdownDescription: "",
+				MarkdownDescription: "The offset from the left of the dashboard, as a column index. Must be between 0 and 23 (inclusive).",
 				Required:            t == positionAttrTypeInput,
 				Computed:            t == positionAttrTypeOutput,
 				Validators: []validator.Int64{
@@ -33,7 +33,7 @@ func positionAttr(t positionAttrType) schema.Attribute {
 				},
 			},
 			"top": schema.Int64Attribute{
-				MarkdownDescription: "",
+				MarkdownDescription: "The offset from the top of the dashboard (0-indexed).",
 				Required:            t == positionAttrTypeInput,
 				Computed:            t == positionAttrTypeOutput,
 				Validators: []validator.Int64{
@@ -45,33 +45,33 @@ func positionAttr(t positionAttrType) schema.Attribute {
 }
 
 var sizeAttr = schema.SingleNestedAttribute{
-	MarkdownDescription: "",
+	MarkdownDescription: "The size of the panel.",
 	Required:            true,
 	Attributes: map[string]schema.Attribute{
 		"height": schema.Int64Attribute{
-			MarkdownDescription: "",
+			MarkdownDescription: "The height of the panel, in \"grid height\" units (each unit is 30px).",
 			Required:            true,
 			Validators: []validator.Int64{
 				int64validator.AtLeast(1),
 			},
 		},
 		"width": schema.Int64Attribute{
-			MarkdownDescription: "",
+			MarkdownDescription: "The width of the panel in columns. Must be between 1 and 24 (inclusive).",
 			Required:            true,
 			Validators: []validator.Int64{
-				int64validator.Between(0, 24),
+				int64validator.Between(1, 24),
 			},
 		},
 	},
 }
 
 var nextPositionAttr = schema.SingleNestedAttribute{
-	MarkdownDescription: "",
+	MarkdownDescription: "This allows you to easily align the \"next panel\" in the dashboard relative to this panel, without needing to know it's absolute position. The desired position can be passed directly to the next panel's `position` attribute.",
 	Computed:            true,
 	Attributes: map[string]schema.Attribute{
-		"right":    positionAttr(positionAttrTypeOutput),
-		"below":    positionAttr(positionAttrTypeOutput),
-		"next_row": positionAttr(positionAttrTypeOutput),
+		"right":    positionAttr(positionAttrTypeOutput, "The position directly to the right of this panel."),
+		"below":    positionAttr(positionAttrTypeOutput, "The position directly below this panel (same offset from the left)."),
+		"next_row": positionAttr(positionAttrTypeOutput, "The position at the start of the next row (below this panel, but at the left of the dashboard)."),
 	},
 }
 
@@ -92,7 +92,7 @@ func AddSizeSchema(attrs map[string]schema.Attribute) {
 }
 
 func AddPositionSchema(attrs map[string]schema.Attribute) {
-	attrs[positionKey] = positionAttr(positionAttrTypeInput)
+	attrs[positionKey] = positionAttr(positionAttrTypeInput, "The position of the top left corner of the panel.")
 }
 
 func AddNextPositionSchema(attrs map[string]schema.Attribute) {

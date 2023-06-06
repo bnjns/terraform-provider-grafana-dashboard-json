@@ -1,0 +1,18 @@
+---
+page_title: "{{ .Type }}: {{ .Name }}"
+description: |-
+    {{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{ .Type }}: {{ .Name }}
+
+Rows are a way to group related panels. They do not actually contain the panels; instead any panels placed below the
+row (but above the next row) are considered "within" the row.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}

@@ -14,7 +14,7 @@ the [`grafana_dashboard` resource](https://registry.terraform.io/providers/grafa
 
 ## Example Usage
 
-{{ tffile "examples/data-sources/dashboard/default.tf" }}
+{{ tffile "examples/data-sources/grafana-dashboard-json_dashboard/default.tf" }}
 
 ### Configuring panels and rows
 
@@ -24,7 +24,7 @@ allows you to use the native Terraform syntax to configure the panels.
 
 All rows and panels will be automatically provided an auto-incrementing ID in the order they're provided.
 
-{{ tffile "examples/data-sources/dashboard/panels_datasource.tf" }}
+{{ tffile "examples/data-sources/grafana-dashboard-json_dashboard/panels_datasource.tf" }}
 
 ### Manually configuring panels and rows
 
@@ -37,6 +37,6 @@ ensure they are positioned correctly (using `gridPos`).
 Each panel/row provided will also be automatically given an auto-incrementing ID in the order they're provided, which
 will begin after any panels/rows provided in the `panels` attribute.
 
-{{ tffile "examples/data-sources/dashboard/panels_manual.tf" }}
+{{ tffile "examples/data-sources/grafana-dashboard-json_dashboard/panels_manual.tf" }}
 
 {{ .SchemaMarkdown | trimspace }}

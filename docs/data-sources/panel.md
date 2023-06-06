@@ -17,7 +17,7 @@ description: |-
 ### Required
 
 - `datasource` (Attributes) (see [below for nested schema](#nestedatt--datasource))
-- `size` (Attributes) (see [below for nested schema](#nestedatt--size))
+- `size` (Attributes) The size of the panel. (see [below for nested schema](#nestedatt--size))
 - `targets` (Attributes List) (see [below for nested schema](#nestedatt--targets))
 - `title` (String)
 - `type` (String)
@@ -25,11 +25,11 @@ description: |-
 ### Optional
 
 - `extra_json` (String)
-- `position` (Attributes) (see [below for nested schema](#nestedatt--position))
+- `position` (Attributes) The position of the top left corner of the panel. (see [below for nested schema](#nestedatt--position))
 
 ### Read-Only
 
-- `next_position` (Attributes) (see [below for nested schema](#nestedatt--next_position))
+- `next_position` (Attributes) This allows you to easily align the "next panel" in the dashboard relative to this panel, without needing to know it's absolute position. The desired position can be passed directly to the next panel's `position` attribute. (see [below for nested schema](#nestedatt--next_position))
 - `rendered_json` (String)
 
 <a id="nestedatt--datasource"></a>
@@ -46,8 +46,8 @@ Required:
 
 Required:
 
-- `height` (Number)
-- `width` (Number)
+- `height` (Number) The height of the panel, in "grid height" units (each unit is 30px).
+- `width` (Number) The width of the panel in columns. Must be between 1 and 24 (inclusive).
 
 
 <a id="nestedatt--targets"></a>
@@ -67,8 +67,8 @@ Optional:
 
 Required:
 
-- `left` (Number)
-- `top` (Number)
+- `left` (Number) The offset from the left of the dashboard, as a column index. Must be between 0 and 23 (inclusive).
+- `top` (Number) The offset from the top of the dashboard (0-indexed).
 
 
 <a id="nestedatt--next_position"></a>
@@ -76,17 +76,17 @@ Required:
 
 Read-Only:
 
-- `below` (Attributes) (see [below for nested schema](#nestedatt--next_position--below))
-- `next_row` (Attributes) (see [below for nested schema](#nestedatt--next_position--next_row))
-- `right` (Attributes) (see [below for nested schema](#nestedatt--next_position--right))
+- `below` (Attributes) The position directly below this panel (same offset from the left). (see [below for nested schema](#nestedatt--next_position--below))
+- `next_row` (Attributes) The position at the start of the next row (below this panel, but at the left of the dashboard). (see [below for nested schema](#nestedatt--next_position--next_row))
+- `right` (Attributes) The position directly to the right of this panel. (see [below for nested schema](#nestedatt--next_position--right))
 
 <a id="nestedatt--next_position--below"></a>
 ### Nested Schema for `next_position.below`
 
 Read-Only:
 
-- `left` (Number)
-- `top` (Number)
+- `left` (Number) The offset from the left of the dashboard, as a column index. Must be between 0 and 23 (inclusive).
+- `top` (Number) The offset from the top of the dashboard (0-indexed).
 
 
 <a id="nestedatt--next_position--next_row"></a>
@@ -94,8 +94,8 @@ Read-Only:
 
 Read-Only:
 
-- `left` (Number)
-- `top` (Number)
+- `left` (Number) The offset from the left of the dashboard, as a column index. Must be between 0 and 23 (inclusive).
+- `top` (Number) The offset from the top of the dashboard (0-indexed).
 
 
 <a id="nestedatt--next_position--right"></a>
@@ -103,5 +103,5 @@ Read-Only:
 
 Read-Only:
 
-- `left` (Number)
-- `top` (Number)
+- `left` (Number) The offset from the left of the dashboard, as a column index. Must be between 0 and 23 (inclusive).
+- `top` (Number) The offset from the top of the dashboard (0-indexed).

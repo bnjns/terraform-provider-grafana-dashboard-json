@@ -23,11 +23,11 @@ func (d dataSource) Metadata(ctx context.Context, request datasource.MetadataReq
 func (d dataSource) Schema(ctx context.Context, request datasource.SchemaRequest, response *datasource.SchemaResponse) {
 	attrs := map[string]schema.Attribute{
 		"rendered_json": schema.StringAttribute{
-			MarkdownDescription: "",
+			MarkdownDescription: "The JSON-encoded string of the row. This can be included in a dashboard by adding this to the `panels` attribute.",
 			Computed:            true,
 		},
 		"title": schema.StringAttribute{
-			MarkdownDescription: "",
+			MarkdownDescription: "The text to display.",
 			Required:            true,
 		},
 	}
@@ -35,8 +35,8 @@ func (d dataSource) Schema(ctx context.Context, request datasource.SchemaRequest
 	utils.AddNextPositionSchema(attrs)
 
 	response.Schema = schema.Schema{
-		MarkdownDescription: "",
-		Attributes:          attrs,
+		Description: "Generates the JSON for a row.",
+		Attributes:  attrs,
 	}
 }
 
